@@ -31,7 +31,10 @@ export default function AdminLayout({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : 'auto';
+    // Only lock body scroll on small screens when mobile menu is open
+    if (window.innerWidth < 1024) {
+      document.body.style.overflow = open ? 'hidden' : 'auto';
+    }
   }, [open]);
 
   const handleLogout = async () => {
@@ -49,43 +52,46 @@ export default function AdminLayout({ children }) {
   };
 
   const SidebarContent = () => (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold">GiiTech Admin</h2>
-        <p className="text-sm text-teal-200">{role?.toUpperCase()}</p>
+    <div className="flex flex-col h-full">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold text-white">GiiTech Admin</h2>
+        <p className="text-sm text-warm-amber font-medium tracking-wide">{role?.toUpperCase()}</p>
       </div>
-<nav className="space-y-4">
-  <Link to="/dashboard" className="flex items-center gap-2 hover:text-cta"><FaTachometerAlt /> Dashboard</Link>
-  <Link to="/admin/users" className="flex items-center gap-2 hover:text-cta"><FaUsers /> Manage Users</Link>
-  <Link to="/admin/forms" className="flex items-center gap-2 hover:text-cta"><FaWpforms /> Contact Forms</Link>
-  <Link to="/admin/add-user" className="flex items-center gap-2 hover:text-cta"><FaUserPlus /> Add User</Link>
 
-  {/* Services */}
-  <Link to="/admin/services" className="flex items-center gap-2 hover:text-cta"><FaTools /> Add Service</Link>
-  <Link to="/admin/manage-services" className="flex items-center gap-2 hover:text-cta"><FaCog /> Manage Services</Link>
+      <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+        <Link to="/dashboard" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTachometerAlt /> Dashboard</Link>
+        <Link to="/admin/users" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUsers /> Manage Users</Link>
+        <Link to="/admin/forms" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaWpforms /> Contact Forms</Link>
+        <Link to="/admin/add-user" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUserPlus /> Add User</Link>
 
-  {/* Projects & Blog */}
-  <Link to="/admin/add-project" className="flex items-center gap-2 hover:text-cta"><FaBriefcase /> Add Project</Link>
-  <Link to="/admin/add-post" className="flex items-center gap-2 hover:text-cta"><FaPenNib /> Add Post</Link>
-  <Link to="/admin/manage-posts" className="flex items-center gap-2 hover:text-cta"><FaRegNewspaper /> Manage Posts</Link>
+        <div className="pt-4 pb-2 text-[10px] uppercase text-gray-400 font-bold tracking-widest">Services & Projects</div>
+        <Link to="/admin/services" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTools /> Add Service</Link>
+        <Link to="/admin/manage-services" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Manage Services</Link>
         
-  {/* FAQ */}
-  <Link to="/admin/add-faq" className="flex items-center gap-2 hover:text-cta"><FaPlusCircle /> Add FAQ</Link>
-  <Link to="/admin/manage-faqs" className="flex items-center gap-2 hover:text-cta"><FaTools /> Manage FAQs</Link>
+        {/* Project Links Grouped Together */}
+        <Link to="/admin/add-project" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaBriefcase /> Add Project</Link>
+        <Link to="/admin/manage-projects" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Manage Projects</Link>
+        
+        <Link to="/admin/add-post" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaPenNib /> Add Post</Link>
+        <Link to="/admin/manage-posts" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaRegNewspaper /> Manage Posts</Link>
 
-  <Link to="/admin/activity-logs" className="flex items-center gap-2 hover:text-cta"><FaScroll /> Activity Logs</Link>
-  <Link to="/admin/jobs" className="flex items-center gap-2 hover:text-cta"><FaBriefcase /> Manage Jobs</Link>
-  <Link to="/admin/profile" className="flex items-center gap-2 hover:text-cta"><FaUserCircle /> My Profile</Link>
-  <Link to="/admin/settings" className="flex items-center gap-2 hover:text-cta"><FaCog /> Site Settings</Link>
-</nav>
+        <div className="pt-4 pb-2 text-[10px] uppercase text-gray-400 font-bold tracking-widest">Support & Settings</div>
+        <Link to="/admin/add-faq" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaPlusCircle /> Add FAQ</Link>
+        <Link to="/admin/manage-faqs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTools /> Manage FAQs</Link>
+        <Link to="/admin/activity-logs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaScroll /> Activity Logs</Link>
+        <Link to="/admin/jobs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaBriefcase /> Manage Jobs</Link>
+        <Link to="/admin/profile" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUserCircle /> My Profile</Link>
+        <Link to="/admin/settings" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Site Settings</Link>
+      </nav>
+  
 
-      <div className="mt-10 text-xs text-gray-300 space-y-2">
-        <p>
-          Logged in as<br />{user?.email}
+      <div className="mt-auto pt-6 border-t border-white/10 text-xs text-gray-300 space-y-4">
+        <p className="opacity-70 truncate">
+          Logged in as: <br /><span className="text-white font-medium">{user?.email}</span>
         </p>
         <button
           onClick={handleLogout}
-          className="mt-2 inline-flex items-center gap-2 text-sm text-red-300 hover:text-white bg-red-600 hover:bg-red-700 px-4 py-1 rounded"
+          className="w-full inline-flex items-center justify-center gap-2 text-sm bg-warm-terracotta hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-lg"
         >
           <FaSignOutAlt /> Logout
         </button>
@@ -94,16 +100,19 @@ export default function AdminLayout({ children }) {
   );
 
   return (
-    <div className={`flex min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'}`}>
+    <div className={`flex min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+      
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block w-64 bg-primary text-white pt-[72px] p-2 fixed top-0 left-0 h-full z-40">
-        <SidebarContent />
+      <div className="hidden lg:block w-64 bg-primary text-white fixed top-0 left-0 h-screen z-40 shadow-2xl">
+        <div className="h-full pt-[80px] px-6 pb-6">
+          <SidebarContent />
+        </div>
       </div>
 
       {/* Mobile: Hamburger */}
       <button
         onClick={() => setOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-[100] p-2 bg-primary text-white rounded-md"
+        className="lg:hidden fixed top-4 left-4 z-[100] p-2 bg-primary text-white rounded-md shadow-lg hover:bg-cta transition-colors"
       >
         <FaBars size={20} />
       </button>
@@ -113,38 +122,42 @@ export default function AdminLayout({ children }) {
         {open && (
           <>
             <motion.div
-              className="fixed inset-0 top-[64px] bg-black/50 z-30"
+              className="fixed inset-0 bg-black/60 z-[110] backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
             />
             <motion.div
-              className="fixed top-[64px] left-0 z-40 h-[calc(100%-64px)] w-64 overflow-y-auto bg-primary text-white shadow-lg"
+              className="fixed top-0 left-0 z-[120] h-screen w-72 bg-primary text-white shadow-2xl overflow-hidden"
               variants={sidebarVar}
               initial="hidden"
               animate="visible"
               exit="hidden"
-              transition={{ type: 'spring', stiffness: 260, damping: 25 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              <div className="flex justify-end px-4 pt-4">
-                <button onClick={() => setOpen(false)} className="text-white">
-                  <FaTimes size={20} />
-                </button>
-              </div>
-              <div className="px-6 pt-2 pb-6">
-                <SidebarContent />
+              <div className="h-full flex flex-col p-6">
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => setOpen(false)} className="p-2 hover:bg-white/10 rounded-full text-white">
+                    <FaTimes size={24} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <SidebarContent />
+                </div>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
-        <main className="flex-1 pt-[72px] px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 pb-4 w-full lg:pl-[220px] overflow-x-hidden">
-          {children}
+        <main className="flex-1 pt-[88px] pb-10 px-4 sm:px-6 md:px-8 lg:pl-[280px] transition-all duration-300">
+          <div className="max-w-7xl mx-auto">
+             {children}
+          </div>
         </main>
       </div>
     </div>

@@ -40,6 +40,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 import MainLayout from './components/MainLayout';
 
+import ManageProjects from './pages/admin/ManageProjects';
+import EditProject from './pages/admin/EditProject';
+
 import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
 
@@ -254,6 +257,23 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          {/* Project Management Routes */}
+<Route
+  path="/admin/manage-projects"
+  element={
+    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+      <ManageProjects />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin/edit-project/:id"
+  element={
+    <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+      <EditProject />
+    </ProtectedRoute>
+  }
+/>
 
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />

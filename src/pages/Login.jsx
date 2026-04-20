@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { loginUser } from '../firebase/auth';
-import { useNavigate, Link } from 'react-router-dom'; // ✅ Link added here
+import { useNavigate, Link } from 'react-router-dom';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
+import { Eye, EyeOff } from 'lucide-react'; // ✅ Import icons
 
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // ✅ Loading state
-  const [canRetry, setCanRetry] = useState(false); // ✅ Retry state
+  const [loading, setLoading] = useState(false);
+  const [canRetry, setCanRetry] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // ✅ Toggle state
 
-  // ✅ Detect when internet comes back
+  // Detect when internet comes back
   useEffect(() => {
     const handleOnline = () => {
       if (error.includes('No internet connection')) {
@@ -37,16 +39,16 @@ export default function Login() {
     try {
       const user = await loginUser(form.email, form.password);
       console.log('Logged in as:', user.email);
-      navigate('/dashboard'); // ✅ Redirect on successful login
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       if (err.code === 'auth/network-request-failed' || !navigator.onLine) {
         setError('No internet connection. Please check your network and try again.');
-        // Retry will appear once connection is back
       } else {
         setError('Invalid credentials or user not found.');
       }
     } finally {
+      loading && setLoading(false);
       setLoading(false);
     }
   };
@@ -69,17 +71,33 @@ export default function Login() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary"
+            required
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          {/* ✅ Password Input Container */}
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'} // ✅ Dynamic type
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary pr-10"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+            >
+              {showPassword ? (
+                <EyeOff size={20} />
+              ) : (
+                <Eye size={20} />
+              )}
+            </button>
+          </div>
 
           {error && (
             <div className="text-center space-y-2">
@@ -88,7 +106,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="bg-cta text-white px-4 py-2 rounded-md hover:bg-primary transition"
+                  className="bg-cta text-white px-4 py-2 rounded-xl hover:bg-primary transition"
                 >
                   Retry
                 </button>
@@ -99,7 +117,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-primary text-white py-3 rounded-md hover:bg-cta transition flex items-center justify-center ${
+            className={`w-full bg-primary text-white py-3 rounded-2xl hover:bg-cta transition flex items-center justify-center ${
               loading ? 'opacity-70 cursor-not-allowed' : ''
             }`}
           >
@@ -129,7 +147,6 @@ export default function Login() {
             )}
           </button>
 
-          {/* ✅ Back to Homepage */}
           <Link
             to="/"
             className="block mt-4 text-center text-sm text-primary hover:underline"

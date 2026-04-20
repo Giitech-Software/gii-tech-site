@@ -32,7 +32,7 @@ export default function PublicHeader() {
               <div className="flex items-center space-x-2">
                 <img src={logo} alt="Logo" className="h-8 w-8" />
                 <Link to="/" className="text-xl font-bold tracking-wide text-white">
-                  GiiTech Software Systems
+                  ASTEM Software Labs
                 </Link>
               </div>
 
