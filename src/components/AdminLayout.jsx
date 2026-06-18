@@ -22,6 +22,9 @@ import {
   FaPenNib,
   FaPlusCircle,
   FaRegNewspaper,
+  FaHandshake,
+  FaLayerGroup,
+  FaQuoteLeft
 } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
@@ -31,7 +34,6 @@ export default function AdminLayout({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Only lock body scroll on small screens when mobile menu is open
     if (window.innerWidth < 1024) {
       document.body.style.overflow = open ? 'hidden' : 'auto';
     }
@@ -51,47 +53,50 @@ export default function AdminLayout({ children }) {
     visible: { x: 0 },
   };
 
+  const navLinkClass = "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm leading-tight hover:bg-white/10 hover:text-warm-amber transition-colors";
+  const sectionClass = "pt-3 pb-1 text-[10px] uppercase text-gray-400 font-bold tracking-widest";
+
   const SidebarContent = () => (
-    <div className="flex flex-col h-full">
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-white">GiiTech Admin</h2>
-        <p className="text-sm text-warm-amber font-medium tracking-wide">{role?.toUpperCase()}</p>
+    <div className="flex flex-col h-full min-h-0">
+      <div className="mb-3 shrink-0">
+        <h2 className="text-lg font-bold text-white">ASTEM Admin</h2>
+        <p className="text-xs text-warm-amber font-medium tracking-wide">{role?.toUpperCase()}</p>
       </div>
 
-      <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
-        <Link to="/dashboard" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTachometerAlt /> Dashboard</Link>
-        <Link to="/admin/users" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUsers /> Manage Users</Link>
-        <Link to="/admin/forms" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaWpforms /> Contact Forms</Link>
-        <Link to="/admin/add-user" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUserPlus /> Add User</Link>
+      <nav className="flex-1 min-h-0 space-y-1 overflow-y-auto pr-1.5 custom-scrollbar">
+        <Link to="/dashboard" className={navLinkClass}><FaTachometerAlt /> Dashboard</Link>
+        <Link to="/admin/users" className={navLinkClass}><FaUsers /> Manage Users</Link>
+        <Link to="/admin/forms" className={navLinkClass}><FaWpforms /> Contact Forms</Link>
+        <Link to="/admin/add-user" className={navLinkClass}><FaUserPlus /> Add User</Link>
 
-        <div className="pt-4 pb-2 text-[10px] uppercase text-gray-400 font-bold tracking-widest">Services & Projects</div>
-        <Link to="/admin/services" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTools /> Add Service</Link>
-        <Link to="/admin/manage-services" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Manage Services</Link>
+        <div className={sectionClass}>Services & Projects</div>
+        <Link to="/admin/services" className={navLinkClass}><FaTools /> Add Service</Link>
+        <Link to="/admin/manage-services" className={navLinkClass}><FaCog /> Manage Services</Link>
+        <Link to="/admin/enterprise-features" className={navLinkClass}><FaLayerGroup /> Enterprise Features</Link>
+        <Link to="/admin/client-testimonials" className={navLinkClass}><FaQuoteLeft /> Client Testimonials</Link>
+        <Link to="/admin/add-project" className={navLinkClass}><FaBriefcase /> Add Project</Link>
+        <Link to="/admin/manage-projects" className={navLinkClass}><FaCog /> Manage Projects</Link>
         
-        {/* Project Links Grouped Together */}
-        <Link to="/admin/add-project" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaBriefcase /> Add Project</Link>
-        <Link to="/admin/manage-projects" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Manage Projects</Link>
-        
-        <Link to="/admin/add-post" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaPenNib /> Add Post</Link>
-        <Link to="/admin/manage-posts" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaRegNewspaper /> Manage Posts</Link>
+        <Link to="/admin/add-post" className={navLinkClass}><FaPenNib /> Add Post</Link>
+        <Link to="/admin/manage-posts" className={navLinkClass}><FaRegNewspaper /> Manage Posts</Link>
+        <Link to="/admin/add-partner" className={navLinkClass}><FaHandshake /> Manage Partners</Link>
 
-        <div className="pt-4 pb-2 text-[10px] uppercase text-gray-400 font-bold tracking-widest">Support & Settings</div>
-        <Link to="/admin/add-faq" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaPlusCircle /> Add FAQ</Link>
-        <Link to="/admin/manage-faqs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaTools /> Manage FAQs</Link>
-        <Link to="/admin/activity-logs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaScroll /> Activity Logs</Link>
-        <Link to="/admin/jobs" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaBriefcase /> Manage Jobs</Link>
-        <Link to="/admin/profile" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaUserCircle /> My Profile</Link>
-        <Link to="/admin/settings" className="flex items-center gap-2 p-1 rounded-lg hover:bg-white/10 hover:text-warm-amber transition-colors"><FaCog /> Site Settings</Link>
+        <div className={sectionClass}>Support & Settings</div>
+        <Link to="/admin/add-faq" className={navLinkClass}><FaPlusCircle /> Add FAQ</Link>
+        <Link to="/admin/manage-faqs" className={navLinkClass}><FaTools /> Manage FAQs</Link>
+        <Link to="/admin/activity-logs" className={navLinkClass}><FaScroll /> Activity Logs</Link>
+        <Link to="/admin/jobs" className={navLinkClass}><FaBriefcase /> Manage Jobs</Link>
+        <Link to="/admin/profile" className={navLinkClass}><FaUserCircle /> My Profile</Link>
+        <Link to="/admin/settings" className={navLinkClass}><FaCog /> Site Settings</Link>
       </nav>
-  
 
-      <div className="mt-auto pt-6 border-t border-white/10 text-xs text-gray-300 space-y-4">
+      <div className="mt-3 shrink-0 space-y-2 border-t border-white/10 pt-3 text-xs text-gray-300">
         <p className="opacity-70 truncate">
           Logged in as: <br /><span className="text-white font-medium">{user?.email}</span>
         </p>
         <button
           onClick={handleLogout}
-          className="w-full inline-flex items-center justify-center gap-2 text-sm bg-warm-terracotta hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors shadow-lg"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-warm-terracotta px-3 py-1.5 text-sm text-white shadow-lg transition-colors hover:bg-red-700"
         >
           <FaSignOutAlt /> Logout
         </button>
@@ -104,7 +109,7 @@ export default function AdminLayout({ children }) {
       
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-64 bg-primary text-white fixed top-0 left-0 h-screen z-40 shadow-2xl">
-        <div className="h-full pt-[80px] px-6 pb-6">
+        <div className="h-full px-5 pb-5 pt-[76px]">
           <SidebarContent />
         </div>
       </div>
@@ -112,7 +117,8 @@ export default function AdminLayout({ children }) {
       {/* Mobile: Hamburger */}
       <button
         onClick={() => setOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-[100] p-2 bg-primary text-white rounded-md shadow-lg hover:bg-cta transition-colors"
+        aria-label="Open admin menu"
+        className="lg:hidden fixed top-3 left-4 z-[70] h-10 w-10 inline-flex items-center justify-center bg-primary text-white rounded-md shadow-lg hover:bg-cta transition-colors"
       >
         <FaBars size={20} />
       </button>
@@ -129,20 +135,24 @@ export default function AdminLayout({ children }) {
               onClick={() => setOpen(false)}
             />
             <motion.div
-              className="fixed top-0 left-0 z-[120] h-screen w-72 bg-primary text-white shadow-2xl overflow-hidden"
+              className="fixed top-0 left-0 z-[120] h-[100dvh] w-72 max-w-[85vw] bg-primary text-white shadow-2xl overflow-hidden"
               variants={sidebarVar}
               initial="hidden"
               animate="visible"
               exit="hidden"
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              <div className="h-full flex flex-col p-6">
-                <div className="flex justify-end mb-4">
-                  <button onClick={() => setOpen(false)} className="p-2 hover:bg-white/10 rounded-full text-white">
-                    <FaTimes size={24} />
+              <div className="h-full min-h-0 flex flex-col p-4">
+                <div className="mb-2 flex shrink-0 justify-end">
+                  <button
+                    onClick={() => setOpen(false)}
+                    aria-label="Close admin menu"
+                    className="h-9 w-9 inline-flex items-center justify-center hover:bg-white/10 rounded-full text-white"
+                  >
+                    <FaTimes size={22} />
                   </button>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 min-h-0">
                   <SidebarContent />
                 </div>
               </div>
@@ -154,7 +164,7 @@ export default function AdminLayout({ children }) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
-        <main className="flex-1 pt-[88px] pb-10 px-4 sm:px-6 md:px-8 lg:pl-[280px] transition-all duration-300">
+        <main className="flex-1 pt-20 pb-6 px-4 sm:px-5 md:px-6 lg:pl-[280px] transition-all duration-300">
           <div className="max-w-7xl mx-auto">
              {children}
           </div>

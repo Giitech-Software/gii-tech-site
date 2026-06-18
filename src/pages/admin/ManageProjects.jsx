@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
 import { toast } from 'react-toastify';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ManageProjects() {
   const [projects, setProjects] = useState([]);
@@ -41,7 +42,7 @@ export default function ManageProjects() {
 
   return (
     <AdminLayout>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-5">
         <h1 className="text-2xl font-bold">Manage Portfolio</h1>
         <Link to="/admin/add-project" className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-700">
           <FaPlus size={14} /> Add New Project
@@ -49,20 +50,24 @@ export default function ManageProjects() {
       </div>
 
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow overflow-hidden">
+        {loading ? (
+          <LoadingSpinner label="Loading projects" />
+        ) : (
+        <>
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-gray-800 border-b dark:border-gray-700">
-              <th className="p-4 font-bold text-slate-600 dark:text-slate-300">Project Name</th>
-              <th className="p-4 font-bold text-slate-600 dark:text-slate-300">Category</th>
-              <th className="p-4 font-bold text-slate-600 dark:text-slate-300 text-right">Actions</th>
+              <th className="p-3 font-bold text-slate-600 dark:text-slate-300">Project Name</th>
+              <th className="p-3 font-bold text-slate-600 dark:text-slate-300">Category</th>
+              <th className="p-3 font-bold text-slate-600 dark:text-slate-300 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {projects.map((p) => (
               <tr key={p.id} className="border-b dark:border-gray-800 hover:bg-slate-50 dark:hover:bg-gray-800/50">
-                <td className="p-4 font-medium">{p.title || "Untitled Project"}</td>
-                <td className="p-4 text-slate-500">{p.category || "General"}</td>
-                <td className="p-4 text-right flex justify-end gap-3">
+                <td className="p-3 font-medium">{p.title || "Untitled Project"}</td>
+                <td className="p-3 text-slate-500">{p.category || "General"}</td>
+                <td className="p-3 text-right flex justify-end gap-3">
                   <Link to={`/admin/edit-project/${p.id}`} className="text-blue-500 hover:text-blue-700">
                     <FaEdit size={18} />
                   </Link>
@@ -74,8 +79,10 @@ export default function ManageProjects() {
             ))}
           </tbody>
         </table>
-        {projects.length === 0 && !loading && (
-          <div className="p-10 text-center text-slate-400">No projects found. Add your first one!</div>
+        {projects.length === 0 && (
+          <div className="p-6 text-center text-slate-400">No projects found. Add your first one!</div>
+        )}
+        </>
         )}
       </div>
     </AdminLayout>

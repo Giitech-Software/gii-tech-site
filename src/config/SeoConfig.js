@@ -1,9 +1,9 @@
 // src/config/SeoConfig.js
 
 const baseUrl = 'https://giitech-software-systems.web.app';
-const siteName = 'GiiTech Software Systems';
-const siteAuthor = 'GiiTech Team';
-const sitePublisher = 'GiiTech Software Systems';
+const siteName = 'ASTEM Software Labs';
+const siteAuthor = 'ASTEM Team';
+const sitePublisher = 'ASTEM Software Labs';
 
 // Static Pages
 const staticPages = {
@@ -17,7 +17,7 @@ const staticPages = {
   },
   services: {
     title: `Services | ${siteName}`,
-    description: 'Modern, scalable software & IT services delivered by GiiTech.',
+    description: 'Modern, scalable software and IT services delivered by ASTEM Software Labs.',
     path: '/services',
     url: `${baseUrl}/services`,
     author: siteAuthor,
@@ -33,7 +33,7 @@ const staticPages = {
   },
   blog: {
     title: `Blog & News | ${siteName}`,
-    description: 'Insights, updates, and industry news from GiiTech.',
+    description: 'Insights, updates, and industry news from ASTEM Software Labs.',
     path: '/blog',
     url: `${baseUrl}/blog`,
     author: siteAuthor,
@@ -41,7 +41,7 @@ const staticPages = {
   },
   contact: {
     title: `Contact Us | ${siteName}`,
-    description: 'Reach out to GiiTech Software Systems for support or collaboration.',
+    description: 'Reach out to ASTEM Software Labs for support or collaboration.',
     path: '/contact',
     url: `${baseUrl}/contact`,
     author: siteAuthor,
@@ -49,9 +49,25 @@ const staticPages = {
   },
   careers: {
     title: `Careers | ${siteName}`,
-    description: 'Join our innovative team at GiiTech Software Systems.',
+    description: 'Join our innovative team at ASTEM Software Labs.',
     path: '/jobs',
     url: `${baseUrl}/jobs`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  },
+  clientConfidence: {
+    title: `Client Confidence | ${siteName}`,
+    description: 'Read what clients say about working with ASTEM Software Labs.',
+    path: '/client-confidence',
+    url: `${baseUrl}/client-confidence`,
+    author: siteAuthor,
+    publisher: sitePublisher,
+  },
+  faqs: {
+    title: `Frequently Asked Questions | ${siteName}`,
+    description: 'Find answers to common questions about ASTEM Software Labs and our services.',
+    path: '/faqs',
+    url: `${baseUrl}/faqs`,
     author: siteAuthor,
     publisher: sitePublisher,
   },

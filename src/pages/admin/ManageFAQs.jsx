@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ManageFAQs() {
   const [faqs, setFaqs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -17,6 +19,8 @@ export default function ManageFAQs() {
       } catch (err) {
         console.error(err);
         toast.error('Failed to load FAQs');
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -24,6 +28,9 @@ export default function ManageFAQs() {
   return (
     <AdminLayout>
       <PageTitle>📚 Manage FAQs</PageTitle>
+      {loading ? (
+        <LoadingSpinner label="Loading FAQs" />
+      ) : (
       <div className="space-y-4">
         {faqs.map((faq) => (
           <div
@@ -43,6 +50,7 @@ export default function ManageFAQs() {
           </div>
         ))}
       </div>
+      )}
     </AdminLayout>
   );
 }

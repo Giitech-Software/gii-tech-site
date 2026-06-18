@@ -23,6 +23,13 @@ const staticRoutes = [
   "/blog",
   "/jobs",
   "/contact",
+  "/client-confidence",
+  "/faqs",
+  "/jobs/frontend-developer",
+  "/jobs/backend-developer",
+  "/jobs/python-programming-expert",
+  "/jobs/react-native-expert",
+  "/jobs/seo-engineer",
   "/login",
 ];
 

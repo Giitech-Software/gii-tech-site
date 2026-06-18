@@ -3,15 +3,21 @@ import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ActivityLogs() {
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const q = query(collection(db, 'activityLogs'), orderBy('timestamp', 'desc'));
-      const snap = await getDocs(q);
-      setLogs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      try {
+        const q = query(collection(db, 'activityLogs'), orderBy('timestamp', 'desc'));
+        const snap = await getDocs(q);
+        setLogs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
 
@@ -20,6 +26,9 @@ export default function ActivityLogs() {
       <>
         <PageTitle>📜 Activity Logs</PageTitle>
 
+        {loading ? (
+          <LoadingSpinner label="Loading activity logs" />
+        ) : (
         <div className="space-y-3">
           {logs.map((l) => (
             <div
@@ -37,6 +46,7 @@ export default function ActivityLogs() {
             </div>
           ))}
         </div>
+        )}
       </>
     </AdminLayout>
   );

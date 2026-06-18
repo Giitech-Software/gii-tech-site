@@ -56,13 +56,13 @@ export default function Login() {
   return (
     <>
       <Seo {...SeoConfig.login} />
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md space-y-4"
+          className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md space-y-3"
         >
           <h2 className="text-2xl font-bold text-center text-primary">
-            GiiTech Admin Login
+            ASTEM Admin Login
           </h2>
 
           <input
@@ -117,7 +117,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-primary text-white py-3 rounded-2xl hover:bg-cta transition flex items-center justify-center ${
+            className={`w-full bg-primary text-white py-3 rounded-lg hover:bg-cta transition flex items-center justify-center ${
               loading ? 'opacity-70 cursor-not-allowed' : ''
             }`}
           >

@@ -1,55 +1,50 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 import { db } from '../firebase/config';
-import ReactMarkdown from 'react-markdown';
 
 const FAQSection = () => {
   const [faqs, setFaqs] = useState([]);
-  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const fetchFaqs = async () => {
-      const q = query(collection(db, 'faqs'), orderBy('timestamp', 'desc'));
-      const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setFaqs(data);
+      try {
+        const q = query(collection(db, 'faqs'), orderBy('timestamp', 'desc'));
+        const snapshot = await getDocs(q);
+        setFaqs(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      } catch (error) {
+        console.error('Error fetching FAQ preview:', error);
+      }
     };
+
     fetchFaqs();
   }, []);
 
-  const displayedFaqs = showAll ? faqs : faqs.slice(0, 3);
-
   return (
-    <section className="py-16 px-4 md:px-12 bg-white text-text">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center text-primary mb-4">
+    <section id="faqs" className="scroll-mt-20 bg-white px-0 py-10 text-text md:px-8">
+      <h2 className="mb-4 px-4 text-center text-2xl font-bold text-primary sm:px-0 sm:text-4xl">
         Frequently Asked Questions
       </h2>
 
-      <div className="space-y-6 max-w-4xl mx-auto">
-        {displayedFaqs.map((faq) => (
+      <div className="mx-auto max-w-4xl space-y-3 px-4 sm:space-y-4 sm:px-0">
+        {faqs.slice(0, 3).map(faq => (
           <div
             key={faq.id}
-            className="border-l-4 border-primary bg-gray-50 p-4 rounded shadow"
+            className="rounded border-l-4 border-primary bg-gray-50 p-4 shadow"
           >
-            <h3 className="text-xl font-semibold mb-2">
-              <span className="mr-2">{faq.icon || '❓'}</span>
-              {faq.question}
-            </h3>
-            <div className="prose prose-sm prose-slate max-w-none">
-              <ReactMarkdown>{faq.answer}</ReactMarkdown>
-            </div>
+            <h3 className="text-xl font-semibold">{faq.question}</h3>
           </div>
         ))}
       </div>
 
-      {faqs.length > 3 && (
-        <div className="mt-8 text-center">
-          <button
-            onClick={() => setShowAll(!showAll)}
-            className="text-cta font-semibold hover:underline transition duration-300"
+      {faqs.length > 0 && (
+        <div className="mt-8 px-4 text-center sm:px-0">
+          <Link
+            to="/faqs"
+            className="inline-flex rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-cta"
           >
-            {showAll ? 'Show Less ▲' : 'Show More ▼'}
-          </button>
+                View All FAQs
+          </Link>
         </div>
       )}
     </section>

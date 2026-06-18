@@ -7,10 +7,12 @@ import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ManageServices() {
   const [services, setServices] = useState([]);
   const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export default function ManageServices() {
         setServices(data);
       } catch (error) {
         console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -61,6 +65,9 @@ export default function ManageServices() {
         </div>
       )}
 
+      {loading ? (
+        <LoadingSpinner label="Loading services" />
+      ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map(service => (
           <div
@@ -95,6 +102,7 @@ export default function ManageServices() {
           </div>
         ))}
       </div>
+      )}
     </AdminLayout>
   );
 }

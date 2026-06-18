@@ -12,6 +12,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function JobApplications() {
   const { jobId } = useParams();
@@ -21,17 +22,22 @@ export default function JobApplications() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isReplying, setIsReplying] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApplications = async () => {
-      const q = query(
-        collection(db, 'applications'),
-        where('jobId', '==', jobId)
-      );
-      const snap = await getDocs(q);
-      setApplications(
-        snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      try {
+        const q = query(
+          collection(db, 'applications'),
+          where('jobId', '==', jobId)
+        );
+        const snap = await getDocs(q);
+        setApplications(
+          snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        );
+      } finally {
+        setLoading(false);
+      }
     };
     fetchApplications();
   }, [jobId]);
@@ -82,7 +88,9 @@ export default function JobApplications() {
         </button>
       </div>
 
-      {applications.length === 0 ? (
+      {loading ? (
+        <LoadingSpinner label="Loading applications" />
+      ) : applications.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300">
           No applications submitted yet for this job.
         </p>

@@ -12,28 +12,34 @@ import { db } from '../../firebase/config';
 import { Link, useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function JobsAdmin() {
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
-      const snap = await getDocs(q);
+      try {
+        const q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
+        const snap = await getDocs(q);
 
-      const jobList = await Promise.all(
-        snap.docs.map(async (docSnap) => {
-          const jobData = { id: docSnap.id, ...docSnap.data() };
-          const appSnap = await getDocs(
-            query(collection(db, 'applications'), where('jobId', '==', docSnap.id))
-          );
-          jobData.applicantCount = appSnap.size;
-          return jobData;
-        })
-      );
+        const jobList = await Promise.all(
+          snap.docs.map(async (docSnap) => {
+            const jobData = { id: docSnap.id, ...docSnap.data() };
+            const appSnap = await getDocs(
+              query(collection(db, 'applications'), where('jobId', '==', docSnap.id))
+            );
+            jobData.applicantCount = appSnap.size;
+            return jobData;
+          })
+        );
 
-      setJobs(jobList);
+        setJobs(jobList);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchJobs();
@@ -58,7 +64,9 @@ export default function JobsAdmin() {
         </Link>
       </div>
 
-      {jobs.length === 0 ? (
+      {loading ? (
+        <LoadingSpinner label="Loading jobs" />
+      ) : jobs.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300">No jobs posted yet.</p>
       ) : (
         <div className="space-y-4">

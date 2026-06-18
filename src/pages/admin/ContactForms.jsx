@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ContactForms() {
   const { role } = useAuth();
@@ -76,7 +77,7 @@ export default function ContactForms() {
         <PageTitle>📝 Contact Forms</PageTitle>
 
         {loading ? (
-          <p className="text-gray-600 dark:text-gray-300">Loading messages...</p>
+          <LoadingSpinner label="Loading messages" />
         ) : forms.length === 0 ? (
           <p className="text-gray-600 dark:text-gray-300">
             No contact messages submitted yet.
@@ -145,7 +146,12 @@ export default function ContactForms() {
                   disabled={sendingReply}
                   className="px-4 py-2 bg-primary text-white rounded hover:bg-accent"
                 >
-                  {sendingReply ? 'Sending...' : 'Send Reply'}
+                  {sendingReply ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                      Sending...
+                    </span>
+                  ) : 'Send Reply'}
                 </button>
               </div>
             </div>

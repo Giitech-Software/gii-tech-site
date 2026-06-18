@@ -1,58 +1,72 @@
-// src/components/BlogPreview.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, query, limit, orderBy } from 'firebase/firestore';
+import { db } from '../firebase/config';
 import { Link } from 'react-router-dom';
-import {
-  FaLightbulb, FaLaptopCode, FaChartPie, FaShieldAlt
-} from 'react-icons/fa';
-
-const posts = [
-  {
-    icon: <FaLightbulb size={24} className="text-accent" />,
-    title: 'How Smart Apps Are Reshaping African Education',
-    snippet: 'Discover how platforms like GiiTech Smart School Manager are revolutionizing teaching and learning in Africa.',
-    link: '/blog/smart-apps-africa',
-  },
-  {
-    icon: <FaLaptopCode size={24} className="text-accent" />,
-    title: 'Building Scalable Web & Mobile Solutions',
-    snippet: 'Learn the modern tech stack powering GiiTech’s apps and how we ensure performance and reliability.',
-    link: '/blog/scalable-solutions',
-  },
-  {
-    icon: <FaChartPie size={24} className="text-accent" />,
-    title: 'Making Data Work For Your Business',
-    snippet: 'Explore practical ways small businesses are using data and analytics to grow smarter with GiiTech BAS.',
-    link: '/blog/data-driven-growth',
-  },
-  {
-    icon: <FaShieldAlt size={24} className="text-accent" />,
-    title: 'Top 5 Ways to Secure Your App in 2025',
-    snippet: 'Security matters. Here are key tips GiiTech follows to protect user data and app integrity.',
-    link: '/blog/app-security-2025',
-  },
-];
+import BlogCard from './BlogCard';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function BlogPreview() {
-  return (
-    <section className="mt-16 px-4 sm:px-10">
-      <h3 className="text-2xl font-bold text-primary mb-10 text-center">Latest From Our Blog</h3>
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      <div className="space-y-8 max-w-4xl mx-auto">
-        {posts.map(({ icon, title, snippet, link }, i) => (
-          <div key={i} className="flex items-start gap-4 border-b pb-6">
-            <div className="pt-1">{icon}</div>
-            <div>
-              <h4 className="text-lg font-semibold text-gray-800">{title}</h4>
-              <p className="text-sm text-gray-600 mt-1">{snippet}</p>
-              <Link
-                to={link}
-                className="text-sm text-accent font-medium mt-2 inline-block hover:underline"
-              >
-                Read More →
-              </Link>
-            </div>
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), limit(3));
+        const snapshot = await getDocs(q);
+        setPosts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      } catch (err) {
+        console.error("Error fetching blog preview:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  if (!loading && posts.length === 0) return null;
+
+  return (
+    <section className="border-t border-slate-100 bg-slate-50/50 px-0 py-12 sm:px-5 lg:px-12">
+      <div className="max-w-7xl mx-auto">
+
+        <div className="mb-8 flex flex-col justify-between gap-4 px-4 sm:px-0 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
+              Enterprise Insights
+            </h2>
+            <div className="w-16 h-1.5 bg-warm mt-3 rounded-full"></div>
+            <p className="mt-3 text-slate-600 text-base">
+              Strategic thinking on digital transformation and industry-leading engineering.
+            </p>
           </div>
-        ))}
+          <Link to="/blog" className="hidden text-sm font-black uppercase tracking-[0.16em] text-warm transition-transform hover:translate-x-2 md:block">
+            View All Insights &rarr;
+          </Link>
+        </div>
+
+        {loading ? (
+          <LoadingSpinner label="Loading insights" />
+        ) : (
+        <div className="grid gap-3 px-4 sm:grid-cols-2 sm:gap-6 sm:px-0 lg:grid-cols-3">
+          {posts.map((post, index) => (
+            <Link key={post.id} to={`/blog#post-${post.id}`}>
+              <BlogCard post={post} index={index} onClick={() => {}} />
+            </Link>
+          ))}
+        </div>
+        )}
+
+        {!loading && (
+        <div className="mt-8 px-4 text-center sm:px-0">
+          <Link
+            to="/blog"
+            className="inline-flex w-full items-center justify-center gap-3 rounded-lg bg-slate-900 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:-translate-y-1 hover:bg-warm hover:shadow-xl sm:w-auto sm:px-8"
+          >
+            Explore the Blog &rarr;
+          </Link>
+        </div>
+        )}
       </div>
     </section>
   );

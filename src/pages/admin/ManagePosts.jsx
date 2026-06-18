@@ -8,10 +8,12 @@ import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import AdminLayout from '../../components/AdminLayout';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function ManagePosts() {
   const [posts, setPosts] = useState([]);
   const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -24,6 +26,8 @@ export default function ManagePosts() {
         console.error('Error fetching posts:', err);
         setMsg('Failed to load posts.');
         setTimeout(() => setMsg(''), 3000);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPosts();
@@ -56,6 +60,9 @@ export default function ManagePosts() {
         )}
 
         <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+          {loading ? (
+            <LoadingSpinner label="Loading posts" />
+          ) : (
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
@@ -105,6 +112,7 @@ export default function ManagePosts() {
               )}
             </tbody>
           </table>
+          )}
         </div>
       </div>
     </AdminLayout>

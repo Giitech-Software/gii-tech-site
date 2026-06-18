@@ -4,6 +4,7 @@ import { db } from '../../firebase/config';
 import AdminLayout from '../../components/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function Settings() {
   const { role } = useAuth();
@@ -47,7 +48,13 @@ export default function Settings() {
     }
   };
 
-  if (loading) return <p className="p-10 text-gray-700 dark:text-gray-200">Loading…</p>;
+  if (loading) {
+    return (
+      <AdminLayout>
+        <LoadingSpinner label="Loading settings" />
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>

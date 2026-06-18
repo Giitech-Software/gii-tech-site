@@ -29,8 +29,12 @@ import About from './pages/About';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
+import ClientConfidence from './pages/ClientConfidence';
+import FAQs from './pages/FAQs';
 import ManageServices from './pages/admin/ManageServices';
 import AddService from './pages/admin/AddService';
+import ManageEnterpriseFeatures from './pages/admin/ManageEnterpriseFeatures';
+import ManageClientTestimonials from './pages/admin/ManageClientTestimonials';
 
 import ManageFAQs from './pages/admin/ManageFAQs';
 import AddFAQ from './pages/admin/AddFAQ';
@@ -39,10 +43,11 @@ import EditFAQ from './pages/admin/EditFAQ';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 import MainLayout from './components/MainLayout';
+import ScrollToTop from './components/ScrollToTop';
 
 import ManageProjects from './pages/admin/ManageProjects';
 import EditProject from './pages/admin/EditProject';
-
+import AddPartner from './pages/admin/AddPartner';
 import { ThemeProvider } from './context/ThemeContext';
 import './index.css';
 
@@ -50,6 +55,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
 
           {/* Public pages wrapped with MainLayout */}
@@ -64,6 +70,9 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/client-confidence" element={<ClientConfidence />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/admin/add-partner" element={<AddPartner />} />
           </Route>
 
           {/* Standalone login route */}
@@ -131,6 +140,22 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
                 <ManageServices />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/enterprise-features"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+                <ManageEnterpriseFeatures />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/client-testimonials"
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+                <ManageClientTestimonials />
               </ProtectedRoute>
             }
           />

@@ -72,7 +72,7 @@ export default function AddUser() {
 
   return (
     <AdminLayout>
-      <div className="p-8 max-w-3xl mx-auto">
+      <div className="p-0 max-w-3xl mx-auto">
         <PageTitle>➕ Add New User</PageTitle>
 
         {status && (
@@ -81,7 +81,7 @@ export default function AddUser() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 bg-white dark:bg-gray-900 p-6 rounded shadow mb-10"
+          className="space-y-3 bg-white dark:bg-gray-900 p-5 rounded-lg shadow mb-6"
         >
           <input
             type="email"
@@ -90,7 +90,7 @@ export default function AddUser() {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+            className="w-full p-2.5 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
           />
           <input
             type="password"
@@ -99,13 +99,13 @@ export default function AddUser() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full p-3 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+            className="w-full p-2.5 border rounded focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
           />
           <select
             name="role"
             value={form.role}
             onChange={handleChange}
-            className="w-full p-3 border rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+            className="w-full p-2.5 border rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
           >
             <option value="admin">Admin</option>
             <option value="editor">Editor</option>

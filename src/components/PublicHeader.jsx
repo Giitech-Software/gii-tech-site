@@ -23,15 +23,15 @@ export default function PublicHeader() {
   const isActive = (path) => currentPath === path;
 
   return (
-    <Disclosure as="nav" className="bg-primary text-white shadow-md sticky top-0 z-50">
+    <Disclosure as="nav" className="sticky top-0 z-50 bg-primary text-white shadow-md">
       {({ open }) => (
         <>
-          <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Logo + Brand */}
-              <div className="flex items-center space-x-2">
-                <img src={logo} alt="Logo" className="h-8 w-8" />
-                <Link to="/" className="text-xl font-bold tracking-wide text-white">
+              <div className="flex min-w-0 items-center gap-2">
+                <img src={logo} alt="ASTEM Software Labs logo" className="h-9 w-9 shrink-0 object-contain" />
+                <Link to="/" className="min-w-0 truncate text-base font-bold tracking-wide text-white sm:text-xl">
                   ASTEM Software Labs
                 </Link>
               </div>
@@ -50,20 +50,19 @@ export default function PublicHeader() {
                   </Link>
                 ))}
 
-                {user ? (
+                {user && (
                   <Link to="/dashboard" className="bg-white text-primary px-4 py-2 rounded hover:bg-accent hover:text-white">
                     Dashboard
-                  </Link>
-                ) : (
-                  <Link to="/login" className="bg-white text-primary px-4 py-2 rounded hover:bg-accent hover:text-white">
-                    Login
                   </Link>
                 )}
               </div>
 
               {/* Mobile menu button */}
               <div className="md:hidden flex items-center">
-                <Disclosure.Button className="text-white inline-flex items-center justify-center p-2 hover:text-accent focus:outline-none">
+                <Disclosure.Button
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-white transition hover:bg-white/10 hover:text-accent focus:outline-none focus:ring-2 focus:ring-white/60"
+                  aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+                >
                   {open ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
                 </Disclosure.Button>
               </div>
@@ -71,25 +70,21 @@ export default function PublicHeader() {
           </div>
 
           {/* Mobile Navigation */}
-          <Disclosure.Panel className="md:hidden px-4 pb-4 space-y-2">
+          <Disclosure.Panel className="md:hidden border-t border-white/10 bg-primary px-3 pb-4 pt-3 shadow-xl">
             {navLinks.map(({ label, to }) => (
               <Link
                 key={to}
                 to={to}
-                className={`block py-2 px-3 rounded transition ${
+                className={`block rounded-lg px-3 py-3 text-base font-semibold transition ${
                   isActive(to) ? 'bg-accent text-white' : 'text-white hover:bg-white hover:text-primary'
                 }`}
               >
                 {label}
               </Link>
             ))}
-            {user ? (
-              <Link to="/dashboard" className="block py-2 px-3 bg-white text-primary rounded">
+            {user && (
+              <Link to="/dashboard" className="mt-2 block rounded-lg bg-white px-3 py-3 text-center text-base font-bold text-primary">
                 Dashboard
-              </Link>
-            ) : (
-              <Link to="/login" className="block py-2 px-3 bg-white text-primary rounded">
-                Login
               </Link>
             )}
           </Disclosure.Panel>

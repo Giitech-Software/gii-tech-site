@@ -94,9 +94,9 @@ export default function EditProject() {
       
       <form
         onSubmit={handleUpdate}
-        className="space-y-6 bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg max-w-4xl"
+        className="space-y-4 bg-white dark:bg-gray-900 p-5 sm:p-6 rounded-lg shadow-lg max-w-4xl"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Title */}
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Project Title</label>
@@ -149,9 +149,9 @@ export default function EditProject() {
         </div>
 
         {/* Image Preview & Upload */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Project Cover Image</label>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             {currentImage && (
               <div className="relative group">
                 <img
@@ -174,7 +174,7 @@ export default function EditProject() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex gap-3 pt-2">
           <button
             type="submit"
             disabled={loading}

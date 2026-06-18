@@ -1,11 +1,13 @@
-// src/pages/JobDetails.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { BriefcaseBusiness, MapPin } from 'lucide-react';
 import { db, storage } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { findFeaturedOpening } from '../data/careerOpenings';
 
 export default function JobDetails() {
   const { id } = useParams();
@@ -14,29 +16,25 @@ export default function JobDetails() {
   const [msg, setMsg] = useState('');
   const [uploading, setUploading] = useState(false);
 
-  // Fetch job details
   useEffect(() => {
-    (async () => {
+    const fetchJob = async () => {
       const snap = await getDoc(doc(db, 'jobs', id));
-      if (snap.exists()) setJob(snap.data());
-    })();
+      setJob(snap.exists() ? snap.data() : findFeaturedOpening(id) || false);
+    };
+
+    fetchJob();
   }, [id]);
 
-  // Handle form input change
-  const handleChange = e => {
-    const { name, value, files } = e.target;
-    if (name === 'cv') {
-      setForm({ ...form, cv: files[0] });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+  const handleChange = event => {
+    const { name, value, files } = event.target;
+    setForm({ ...form, [name]: name === 'cv' ? files[0] : value });
   };
 
-  // Submit application
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const handleSubmit = async event => {
+    event.preventDefault();
     setMsg('');
     setUploading(true);
+
     try {
       let cvUrl = '';
       if (form.cv) {
@@ -51,60 +49,87 @@ export default function JobDetails() {
         coverLetter: form.cover,
         cvUrl,
         submittedAt: serverTimestamp(),
-        jobId: id, // ✅ Needed for admin stats
+        jobId: id,
       };
 
-      // Save to both job-specific and global collection
       await Promise.all([
         addDoc(collection(db, 'jobs', id, 'applications'), applicationData),
         addDoc(collection(db, 'applications'), applicationData),
       ]);
 
-      setMsg('✅ Application submitted!');
+      setMsg('Application submitted successfully.');
       setForm({ name: '', email: '', cover: '', cv: null });
-    } catch (err) {
-      console.error(err);
-      setMsg('❌ ' + err.message);
+    } catch (error) {
+      console.error(error);
+      setMsg('Unable to submit application: ' + error.message);
     } finally {
       setUploading(false);
     }
   };
 
-  if (!job) return <p className="p-10">Loading…</p>;
+  if (job === null) return <LoadingSpinner label="Loading job details" fullPage />;
 
-  const excerpt = job.description?.slice(0, 150) || 'Job opportunity at GiiTech Software Systems.';
+  if (job === false) {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-16 text-center">
+        <h1 className="text-3xl font-black text-primary">Position Not Found</h1>
+        <Link to="/jobs" className="mt-6 inline-flex text-cta hover:underline">
+          &larr; Back to Jobs
+        </Link>
+      </main>
+    );
+  }
+
+  const excerpt = job.description?.slice(0, 150) || 'Job opportunity at ASTEM Software Labs.';
 
   return (
     <>
       <Seo {...SeoConfig.dynamic.jobPost({ title: job.title, excerpt, id })} />
 
-      
-        <main className="flex-grow p-10 max-w-3xl mx-auto space-y-8">
-          <Link to="/jobs" className="text-cta hover:underline">&larr; Back to Jobs</Link>
+      <section className="bg-slate-950 px-4 py-12 text-white sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-4xl">
+          <Link to="/jobs" className="text-sm font-bold text-accent transition hover:text-white">
+            &larr; Back to Jobs
+          </Link>
+          <BriefcaseBusiness className="mt-8 h-8 w-8 text-warm" aria-hidden="true" />
+          <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">{job.title}</h1>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-slate-300">
+            <span className="inline-flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-warm" aria-hidden="true" />
+              {job.location}
+            </span>
+            <span>{job.type}</span>
+          </div>
+        </div>
+      </section>
 
-          <h2 className="text-4xl font-bold text-primary">{job.title}</h2>
-          <p className="text-gray-600">{job.location} · {job.type}</p>
+      <main className="mx-auto grid w-full max-w-6xl gap-6 px-0 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1fr_24rem]">
+        <section className="space-y-6 px-4 sm:px-0">
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-black text-primary">Role Description</h2>
+            <p className="mt-3 text-base leading-relaxed text-slate-600">{job.description}</p>
+          </div>
+          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <h2 className="text-2xl font-black text-primary">Requirements</h2>
+            <p className="mt-3 text-base leading-relaxed text-slate-600">{job.requirements}</p>
+          </div>
+        </section>
 
-          <section className="prose">
-            <h3>Description</h3>
-            <p>{job.description}</p>
-            <h3>Requirements</h3>
-            <p>{job.requirements}</p>
-          </section>
+        <section className="border-y border-slate-200 bg-slate-50 p-5 sm:rounded-lg sm:border sm:p-6">
+          <h2 className="text-2xl font-black text-primary">Apply Now</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-500">
+            Share your details and attach a PDF resume. We will review your application carefully.
+          </p>
+          {msg && <p className="mt-4 rounded-lg bg-white p-3 text-sm font-bold text-primary">{msg}</p>}
 
-          <hr />
-
-          <h3 className="text-2xl font-semibold text-primary">Apply Now</h3>
-          {msg && <p className="mb-2">{msg}</p>}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
             <input
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="Your Name"
               required
-              className="w-full p-3 border rounded"
+              className="w-full rounded border border-slate-300 bg-white p-3"
             />
             <input
               type="email"
@@ -113,32 +138,36 @@ export default function JobDetails() {
               onChange={handleChange}
               placeholder="Email"
               required
-              className="w-full p-3 border rounded"
+              className="w-full rounded border border-slate-300 bg-white p-3"
             />
             <textarea
               name="cover"
               value={form.cover}
               onChange={handleChange}
               placeholder="Cover Letter (optional)"
-              className="w-full p-3 border rounded h-28"
+              className="h-28 w-full rounded border border-slate-300 bg-white p-3"
             />
             <input
               type="file"
               name="cv"
               accept="application/pdf"
               onChange={handleChange}
-              className="w-full p-3 border rounded"
+              className="w-full rounded border border-slate-300 bg-white p-3 text-sm"
             />
             <button
               disabled={uploading}
-              className="bg-primary text-white px-6 py-3 rounded hover:bg-cta transition"
+              className="w-full rounded bg-warm px-6 py-3 font-bold text-white transition hover:bg-warm-terracotta disabled:cursor-wait disabled:opacity-70"
             >
-              {uploading ? 'Submitting…' : 'Submit Application'}
+              {uploading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  Submitting...
+                </span>
+              ) : 'Submit Application'}
             </button>
           </form>
-        </main>
-
-      
+        </section>
+      </main>
     </>
   );
 }

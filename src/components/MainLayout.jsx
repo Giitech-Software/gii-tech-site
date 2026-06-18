@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PublicHeader from "./PublicHeader";
 import PublicFooter from "./PublicFooter";
+import GuidedAssistant from "./GuidedAssistant";
 import { Outlet, useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ export default function MainLayout() {
       setLoading(true);
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 1000); // time splash is visible
+      }, 2800); // time splash is visible
       return () => clearTimeout(timer);
     } else {
       setLoading(false);
@@ -43,20 +45,22 @@ export default function MainLayout() {
         </main>
         <PublicFooter />
       </div>
+      <GuidedAssistant />
 
       {/* Splash overlay */}
       {loading && (
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center"
-          style={{ backgroundColor: "#1E2A78", zIndex: 50 }}
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+          style={{ backgroundColor: "#1E2A78" }}
         >
           <img
-            src="/logo192.png"
-            alt="GiiTech Logo"
-            className="w-28 h-28 animate-bounce drop-shadow-lg"
+            key={location.pathname}
+            src={logo}
+            alt="ASTEM Software Labs Logo"
+            className="h-28 w-28 animate-bounce object-contain drop-shadow-lg"
           />
           <p className="mt-4 text-lg font-semibold text-white animate-pulse">
-            Loading GiiTech...
+            Loading ASTEM Software Labs...
           </p>
         </div>
       )}

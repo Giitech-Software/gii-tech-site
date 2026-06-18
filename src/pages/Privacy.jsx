@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Privacy = () => (
-  <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-gray-800">
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 text-gray-800">
     <h1 className="text-3xl font-extrabold text-primary mb-6">Privacy Policy</h1>
     <div className="space-y-6 text-base leading-7">
       <p>
-        Your privacy is important to us. At <strong>GiiTech Software Systems</strong>, we are committed
+        Your privacy is important to us. At <strong>ASTEM Software Labs</strong>, we are committed
         to protecting your personal information and ensuring transparency in how we handle your data.
         We only collect data that is necessary to deliver, improve, and personalize your experience
         with our products and services.
@@ -28,7 +28,7 @@ const Privacy = () => (
         significant changes will be communicated accordingly.
       </p>
       <p>
-        Your trust is important to us. At GiiTech, we uphold privacy as a core principle of ethical
+        Your trust is important to us. At ASTEM Software Labs, we uphold privacy as a core principle of ethical
         software development and digital engagement.
       </p>
     </div>

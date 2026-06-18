@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  FaFacebookF, FaTwitter, FaInstagram, FaLinkedin, FaTiktok, FaWhatsapp, FaMapMarkerAlt,
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaTiktok,
+  FaWhatsapp,
+  FaMapMarkerAlt,
 } from 'react-icons/fa';
 
 const socialLinks = [
@@ -10,20 +16,23 @@ const socialLinks = [
   { icon: <FaInstagram />, label: 'Instagram', url: 'https://instagram.com' },
   { icon: <FaLinkedin />, label: 'LinkedIn', url: 'https://linkedin.com' },
   { icon: <FaTiktok />, label: 'TikTok', url: 'https://tiktok.com' },
-  { icon: <FaWhatsapp />, label: 'WhatsApp', url: 'https://wa.me/1234567890' },
+  {
+    icon: <FaWhatsapp />,
+    label: 'WhatsApp',
+    url: 'https://wa.me/233247754531?text=Hi%20ASTEM%20Software%20Labs%2C%20I%20need%20assistance.',
+  },
 ];
 
 const PublicFooter = () => {
   return (
-    <footer className="bg-primary text-white px-4 sm:px-6 py-12 mt-20 text-sm">
-      <div className="max-w-7xl mx-auto grid gap-10 sm:grid-cols-2 md:grid-cols-4">
-        {/* Brand Info */}
+    <footer className="bg-primary text-white px-4 sm:px-6 py-8 mt-10 text-sm">
+      <div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <h3 className="text-xl font-bold mb-1">GiiTech Software Systems</h3>
+          <h3 className="text-xl font-bold mb-1">ASTEM Software Labs</h3>
           <p className="text-accent mb-4">Future Ready Software for a Smarter World</p>
           <div className="space-y-1 text-xs">
             <p><strong>Office:</strong> 23 Innovation Lane, Accra, Ghana</p>
-            <p><strong>Hours:</strong> Mon – Fri, 8:00 AM – 5:00 PM</p>
+            <p><strong>Hours:</strong> Mon - Fri, 8:00 AM - 5:00 PM</p>
             <p><strong>GPS:</strong> GA-123-4567</p>
             <p className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-accent" />
@@ -39,7 +48,6 @@ const PublicFooter = () => {
           </div>
         </div>
 
-        {/* Quick Links */}
         <div>
           <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-1">
@@ -49,7 +57,6 @@ const PublicFooter = () => {
           </ul>
         </div>
 
-        {/* Social Media */}
         <div>
           <h4 className="text-lg font-semibold mb-3">Connect With Us</h4>
           <ul className="space-y-1">
@@ -68,7 +75,6 @@ const PublicFooter = () => {
           </ul>
         </div>
 
-        {/* Newsletter */}
         <div>
           <h4 className="text-lg font-semibold mb-3">Newsletter</h4>
           <p className="text-sm mb-3">Get updates straight to your inbox.</p>
@@ -89,9 +95,8 @@ const PublicFooter = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="mt-10 border-t border-white/20 pt-4 text-center text-xs px-4">
-        © {new Date().getFullYear()} GiiTech Software Systems. All rights reserved.
+      <div className="mt-6 border-t border-white/20 pt-4 text-center text-xs px-4">
+        &copy; {new Date().getFullYear()} ASTEM Software Labs. All rights reserved.
       </div>
     </footer>
   );

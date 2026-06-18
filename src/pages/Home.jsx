@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React, { useEffect } from 'react';
 import { trackSiteVisit } from '../utils/trackVisit';
 import useSiteSettings from '../hooks/useSiteSettings';
@@ -15,6 +16,7 @@ import BlogPreview from '../components/BlogPreview';
 import NewsletterSignup from '../components/NewsletterSignup';
 import CTABanner from '../components/CTABanner';
 import CareerPreview from '../components/CareerPreview';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
   useEffect(() => {
@@ -22,9 +24,9 @@ export default function Home() {
   }, []);
 
   const { settings, loading } = useSiteSettings();
-  if (loading) return <p className="text-center mt-10 text-lg">Loading…</p>;
+  if (loading) return <LoadingSpinner label="Loading homepage" fullPage />;
 
-  const siteName = settings?.siteName || 'GiiTech Software Systems';
+  const siteName = settings?.siteName || 'ASTEM Software Labs';
   const tagline = settings?.tagline || 'Future Ready Software for a Smarter World';
 
   return (
@@ -33,20 +35,18 @@ export default function Home() {
       <div className="min-h-screen bg-background text-text flex flex-col">
         <main className="flex-grow">
           <HeroSection siteName={siteName} tagline={tagline} />
-
-<TrustedLogos />           {/* Boosts credibility early */}
-<FeatureGrid />
-<ServiceGrid />
-<Testimonials />
-<ProjectsPreview />
-<AboutSection />
-<FAQSection />
-<BlogPreview />
-<CareerPreview />
-<NewsletterSignup />       {/* Softer engagement */}
-<CTABanner />        
+          <TrustedLogos />
+          <FeatureGrid />
+          <ServiceGrid />
+          <Testimonials />
+          <ProjectsPreview />
+          <AboutSection />
+          <BlogPreview />
+          <CareerPreview />
+          <FAQSection />
+          <NewsletterSignup />
+          <CTABanner />
         </main>
-      
       </div>
     </>
   );

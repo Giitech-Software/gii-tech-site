@@ -1,0 +1,81 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function currentUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && currentUserDoc().data.role in ['admin', 'super_admin'];
+    }
+
+    function isSuperAdmin() {
+      return signedIn()
+        && currentUserDoc().data.role == 'super_admin';
+    }
+
+    function isPublicContent(collectionName) {
+      return collectionName in [
+        'services',
+        'projects',
+        'posts',
+        'faqs',
+        'partners',
+        'enterpriseFeatures',
+        'clientTestimonials',
+        'jobs',
+        'config'
+      ];
+    }
+
+    match /{collectionName}/{docId} {
+      allow read: if isPublicContent(collectionName);
+      allow create, update, delete: if isPublicContent(collectionName) && isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      allow create, delete: if isSuperAdmin();
+      allow update: if isSuperAdmin() || (signedIn() && request.auth.uid == uid);
+    }
+
+    match /contactForms/{formId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /applications/{applicationId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /jobs/{jobId}/applications/{applicationId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /activityLogs/{logId} {
+      allow create, read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /siteStats/visits {
+      allow read: if isAdmin();
+      allow create: if request.resource.data.keys().hasOnly(['count'])
+        && request.resource.data.count == 1;
+      allow update: if request.resource.data.keys().hasOnly(['count'])
+        && request.resource.data.count == resource.data.count + 1;
+      allow delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

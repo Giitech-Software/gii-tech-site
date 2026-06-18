@@ -1,81 +1,86 @@
-// src/pages/Jobs.jsx
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { db } from '../firebase/config';
 import { Link } from 'react-router-dom';
+import { ArrowRight, BriefcaseBusiness, MapPin } from 'lucide-react';
+import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { featuredOpenings } from '../data/careerOpenings';
 
 export default function Jobs() {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState(featuredOpenings);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      const q    = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
-      const snap = await getDocs(q);
+    const fetchJobs = async () => {
+      try {
+        const q = query(collection(db, 'jobs'), orderBy('postedAt', 'desc'));
+        const snap = await getDocs(q);
+        const openJobs = snap.docs
+          .filter(docSnap => (docSnap.data().status || '').toString().trim().toLowerCase() === 'open')
+          .map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+        const featuredTitles = new Set(featuredOpenings.map(job => job.title.toLowerCase()));
+        const additionalJobs = openJobs.filter(job => !featuredTitles.has(job.title.toLowerCase()));
 
-      // 🐞 DEBUG: log every doc’s status value
-      console.log('Raw jobs:', snap.docs.map(d => d.data().status));
+        setJobs([...featuredOpenings, ...additionalJobs]);
+      } catch (error) {
+        console.error('Error loading open positions:', error);
+        setJobs(featuredOpenings);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      const openJobs = snap.docs
-        .filter(d =>
-          (d.data().status || '')
-            .toString()
-            .trim()
-            .toLowerCase() === 'open'
-        )
-        .map(d => ({ id: d.id, ...d.data() }));
-
-      console.log(
-  'Statuses received:',
-  snap.docs.map(d => JSON.stringify(d.data().status))
-);
-      setJobs(openJobs);
-    })();
+    fetchJobs();
   }, []);
 
   return (
     <>
-    <Seo {...SeoConfig.careers} />
-    <div className="min-h-screen bg-background text-text flex flex-col">
-      
-      {/* Main */}
-      <main className="flex-grow p-10 max-w-3xl mx-auto">
-        <h2 className="text-4xl font-bold text-primary text-center mb-10">
-          🚀 Open Positions
-        </h2>
-
-        {jobs.length === 0 ? (
-          <p className="text-center text-gray-600">
-            We’re not hiring right now. Check back soon!
-          </p>
-        ) : (
-          <div className="space-y-6">
-            {jobs.map(job => (
-              <article key={job.id} className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-2xl font-semibold text-primary">
-                  {job.title}
-                </h3>
-                <p className="text-gray-600 mb-2">
-                  {job.location} · {job.type}
-                </p>
-                <p className="text-gray-700 line-clamp-3">
-                  {job.description}
-                </p>
-                <Link
-                  to={`/jobs/${job.id}`}
-                  className="text-cta hover:underline mt-3 inline-block"
-                >
-                  View Details →
-                </Link>
-              </article>
-            ))}
+      <Seo {...SeoConfig.careers} />
+      <div className="min-h-screen bg-white text-text">
+        <section className="bg-slate-950 px-4 py-14 text-white sm:px-8 sm:py-16">
+          <div className="mx-auto max-w-5xl text-center">
+            <p className="text-sm font-black uppercase tracking-[0.3em] text-warm">Careers at ASTEM</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Build Meaningful Systems With Us
+            </h1>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              Join a practical, ambitious engineering team delivering software that helps organizations work smarter.
+            </p>
           </div>
-        )}
-      </main>
+        </section>
 
-     
-    </div>
+        <main className="mx-auto w-full max-w-7xl px-0 py-10 sm:px-8 sm:py-14">
+          {loading ? (
+            <LoadingSpinner label="Loading open positions" />
+          ) : (
+            <div className="grid gap-3 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {jobs.map(job => (
+                <article
+                  key={job.id}
+                  className="flex flex-col border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-1 hover:border-primary/40 hover:bg-white hover:shadow-lg sm:rounded-lg sm:p-6"
+                >
+                  <BriefcaseBusiness className="h-7 w-7 text-warm" aria-hidden="true" />
+                  <h2 className="mt-4 text-2xl font-black text-primary">{job.title}</h2>
+                  <p className="mt-3 flex items-center gap-2 text-sm font-bold text-slate-500">
+                    <MapPin className="h-4 w-4 text-warm" aria-hidden="true" />
+                    {job.location}
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-slate-500">{job.type}</p>
+                  <p className="mt-4 line-clamp-3 text-base leading-relaxed text-slate-600">{job.description}</p>
+                  <Link
+                    to={`/jobs/${job.id}`}
+                    className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-bold text-cta transition hover:text-primary"
+                  >
+                    View Details <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </article>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </>
   );
 }

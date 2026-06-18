@@ -7,7 +7,7 @@ import {
 
 function IconCircle({ icon }) {
   return (
-    <div className="flex items-center justify-center w-14 h-14 mb-4 rounded-full bg-primary text-white text-2xl">
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white/10 text-warm-amber text-2xl ring-1 ring-white/15">
       {icon}
     </div>
   );
@@ -39,7 +39,7 @@ const services = [
     icon: <FaLaptopCode />,
     text: (
       <>
-        We build secure, scalable <strong>web</strong> and <strong>mobile applications</strong> tailored to your needs—from e-commerce to internal tools. Built with modern stacks and responsive design.{' '}
+        We build secure, scalable <strong>web</strong> and <strong>mobile applications</strong> tailored to your needs, from e-commerce to internal tools. Built with modern stacks and responsive design.{' '}
         <Link to="/services#web-mobile-apps" className="text-accent underline">View Projects</Link>.
       </>
     ),
@@ -98,21 +98,45 @@ const services = [
 
 export default function ServiceGrid() {
   return (
-    <section className="mt-8 px-4 sm:px-10">
-      <h3 className="text-3xl font-bold text-primary text-center mb-10">Our Top Solutions</h3>
-      <div className="flex flex-col gap-8">
-        {services.map(({ title, icon, text }, i) => (
-          <div
-            key={i}
-            className="flex flex-col sm:flex-row items-start gap-6 p-6 border border-gray-200 rounded-lg bg-white hover:shadow-md transition"
+    <section className="bg-slate-950 px-0 py-12 sm:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 max-w-3xl px-4 sm:px-0">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-warm-amber sm:text-sm sm:tracking-[0.3em]">
+            Solution Portfolio
+          </p>
+          <h3 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-4xl">
+            Our Top Solutions
+          </h3>
+          <p className="mt-3 text-base leading-relaxed text-slate-300">
+            Practical software systems for institutions that need dependable operations, better data, and room to grow.
+          </p>
+        </div>
+
+        <div className="grid gap-3 px-4 sm:gap-4 sm:px-0 lg:grid-cols-2">
+          {services.map(({ title, icon, text }, i) => (
+            <article
+              key={i}
+              className="flex flex-col gap-4 rounded-lg border border-white/10 bg-white/[0.04] p-4 transition-all duration-300 hover:border-warm/50 hover:bg-white/[0.07] sm:flex-row sm:p-5"
+            >
+              <IconCircle icon={icon} />
+              <div>
+                <h4 className="mb-2 text-lg font-bold text-white sm:text-xl">{title}</h4>
+                <p className="text-sm leading-relaxed text-slate-300 sm:text-base [&_a]:font-bold [&_a]:text-warm-amber [&_a]:no-underline [&_a:hover]:text-white">
+                  {text}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-8 px-4 text-center sm:px-0">
+          <Link
+            to="/services"
+            className="inline-flex items-center justify-center rounded-lg bg-warm px-8 py-3 text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-warm-terracotta hover:shadow-2xl"
           >
-            <IconCircle icon={icon} />
-            <div>
-              <h4 className="text-xl font-semibold text-primary mb-2">{title}</h4>
-              <p className="text-sm text-gray-700 leading-relaxed">{text}</p>
-            </div>
-          </div>
-        ))}
+            Explore More
+          </Link>
+        </div>
       </div>
     </section>
   );

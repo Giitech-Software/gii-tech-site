@@ -14,21 +14,27 @@ import AdminLayout from '../../components/AdminLayout';
 import { useAuth } from '../../context/AuthContext';
 import { logActivity } from '../../utils/activityLog';
 import PageTitle from '../../components/PageTitle';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function Users() {
   const { user, role } = useAuth();
   const [users, setUsers] = useState([]);
   const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const fetchUsers = async () => {
-    const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-    const snap = await getDocs(q);
-    setUsers(
-      snap.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }))
-    );
+    try {
+      const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      setUsers(
+        snap.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }))
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -88,6 +94,9 @@ export default function Users() {
       </>
       {msg && <p className="mb-4 text-sm text-green-600 dark:text-green-400">{msg}</p>}
 
+      {loading ? (
+        <LoadingSpinner label="Loading users" />
+      ) : (
       <div className="overflow-x-auto">
         <table className="w-full text-left border border-gray-200 dark:border-gray-700">
           <thead className="bg-gray-100 dark:bg-gray-800 dark:text-gray-200">
@@ -148,6 +157,7 @@ export default function Users() {
           </tbody>
         </table>
       </div>
+      )}
     </AdminLayout>
   );
 }

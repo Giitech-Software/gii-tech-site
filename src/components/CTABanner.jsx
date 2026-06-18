@@ -4,24 +4,34 @@ import { Link } from 'react-router-dom';
 
 export default function CTABanner() {
   return (
-    <section className="mt-24 bg-cta text-white py-16 px-4 sm:px-10 text-center">
-      <h3 className="text-3xl sm:text-4xl font-extrabold mb-4">Ready to Elevate Your Business?</h3>
-      <p className="text-lg sm:text-xl mb-6 max-w-3xl mx-auto">
-        Let’s build something great together. From strategy to launch — we’re your tech partner for success.
-      </p>
-      <div className="space-x-4">
-        <Link
-          to="/contact"
-          className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded-md hover:bg-accent hover:text-white transition"
-        >
-          Contact Us
-        </Link>
-        <Link
-          to="/services"
-          className="inline-block border border-white px-6 py-3 rounded-md font-semibold hover:bg-white hover:text-primary transition"
-        >
-          Our Services
-        </Link>
+    <section className="bg-slate-950 px-0 py-12 text-white sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-0 md:flex-row md:items-center md:justify-between">
+        <div className="max-w-3xl">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-warm-amber sm:text-sm sm:tracking-[0.3em]">
+            Start Your Next System
+          </p>
+          <h3 className="mt-2 text-2xl font-black tracking-tight sm:text-4xl">
+            Ready to elevate your business?
+          </h3>
+          <p className="mt-3 text-base leading-relaxed text-slate-300">
+            Let us build something practical, scalable, and reliable together. From strategy to launch, we are your technology partner for success.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row md:shrink-0">
+          <Link
+            to="/contact"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-warm px-7 py-3 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:bg-warm-terracotta hover:shadow-xl sm:w-auto"
+          >
+            Contact Us
+          </Link>
+          <Link
+            to="/services"
+            className="inline-flex w-full items-center justify-center rounded-lg border border-white/30 px-7 py-3 text-sm font-black uppercase tracking-widest text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-slate-950 sm:w-auto"
+          >
+            Our Services
+          </Link>
+        </div>
       </div>
     </section>
   );

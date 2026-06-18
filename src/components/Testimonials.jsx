@@ -1,52 +1,88 @@
 // src/components/Testimonials.jsx
-import React from 'react';
-
-const testimonials = [
-  {
-    quote: 'GiiTech transformed our school operations. The system is fast, user-friendly, and reliable.',
-    name: 'Mrs. Adjoa K.',
-    role: 'School Administrator',
-    image: '/images/clients/adjoa.jpg',
-  },
-  {
-    quote: 'Our business now runs smarter thanks to GiiTech’s analytics tools. Highly recommended!',
-    name: 'Kwame B.',
-    role: 'CEO, TechFarm GH',
-    image: '/images/clients/kwame.jpg',
-  },
-  {
-    quote: 'Their customer support is top-notch. GiiTech delivers exactly what you need.',
-    name: 'Anita D.',
-    role: 'NGO Director',
-    image: '/images/clients/anita.jpg',
-  },
-  {
-    quote: 'From consultation to deployment, GiiTech was professional, efficient, and exceeded expectations.',
-    name: 'Pastor Yaw M.',
-    role: 'Church Planter',
-    image: '/images/clients/yaw.jpg',
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import LoadingSpinner from './LoadingSpinner';
+import { Link } from 'react-router-dom';
+import { fallbackTestimonials } from '../data/clientTestimonials';
 
 export default function Testimonials() {
+  const [testimonials, setTestimonials] = useState(fallbackTestimonials);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const q = query(collection(db, 'clientTestimonials'), orderBy('order', 'asc'));
+        const snap = await getDocs(q);
+        const data = snap.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(testimonial => testimonial.name && testimonial.description);
+
+        if (data.length > 0) {
+          setTestimonials(data);
+        }
+      } catch (error) {
+        console.error('Error fetching client testimonials:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
   return (
-    <section className="bg-white py-16 px-4 sm:px-10">
-      <h3 className="text-2xl font-bold text-primary mb-12 text-center">What Our Clients Say</h3>
-      <div className="space-y-10 max-w-5xl mx-auto">
-        {testimonials.map(({ quote, name, role, image }, index) => (
-          <div key={index} className="flex flex-col md:flex-row items-center gap-6">
-            <img
-              src={image}
-              alt={name}
-              className="w-20 h-20 rounded-full object-cover border-2 border-accent"
-            />
-            <div className="text-center md:text-left">
-              <p className="text-gray-700 italic mb-2">“{quote}”</p>
-              <p className="text-sm font-semibold text-primary">— {name}</p>
-              <p className="text-sm text-gray-500">{role}</p>
-            </div>
+    <section className="bg-white px-0 py-12 sm:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex flex-col gap-4 px-4 sm:px-0 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-warm sm:text-sm sm:tracking-[0.3em]">
+              Client Confidence
+            </p>
+            <h3 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-4xl">
+              What Our Clients Say
+            </h3>
           </div>
-        ))}
+          <p className="max-w-md text-base leading-relaxed text-slate-600">
+            Built for teams that need reliable systems, clear communication, and long-term technical partnership.
+          </p>
+        </div>
+
+        {loading ? (
+          <LoadingSpinner label="Loading client testimonials" />
+        ) : (
+        <div className="grid gap-3 px-4 sm:gap-5 sm:px-0 md:grid-cols-2 lg:grid-cols-4">
+          {testimonials.slice(0, 4).map(({ id, quote, description, imageUrl, name, role }) => (
+            <figure key={id || name} className="rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-5">
+              {imageUrl && (
+                <div className="-mx-4 -mt-4 mb-4 h-56 overflow-hidden bg-white ring-1 ring-slate-200 sm:mx-0 sm:mt-0 sm:h-60 sm:rounded-lg">
+                  <img
+                    src={imageUrl}
+                    alt={name}
+                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+              )}
+              <blockquote className="text-base leading-relaxed text-slate-700">
+                "{description || quote}"
+              </blockquote>
+              <figcaption className="mt-4 border-t border-slate-200 pt-3">
+                <p className="font-black text-slate-950">{name}</p>
+                <p className="mt-1 text-base text-slate-500">{role}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        )}
+        <div className="mt-8 text-center">
+          <Link
+            to="/client-confidence"
+            className="inline-flex rounded-lg border border-primary px-5 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white"
+          >
+            Explore More
+          </Link>
+        </div>
       </div>
     </section>
   );

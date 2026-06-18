@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const AboutUs = () => (
-  <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-gray-800">
-    <h1 className="text-3xl font-extrabold text-primary mb-6">About Us</h1>
+  <div className="mx-auto max-w-4xl px-4 py-8 text-gray-800 sm:px-6 sm:py-10">
+    <h1 className="mb-6 text-3xl font-extrabold text-primary sm:text-4xl">About Us</h1>
     <div className="space-y-6 text-base leading-7">
       <p>
-        At <strong>GiiTech Software Systems</strong>, we are passionate about engineering future-ready
+        At <strong>ASTEM Software Labs</strong>, we are passionate about engineering future-ready
         solutions that empower businesses to thrive in a rapidly evolving digital world. Founded on
         the belief that technology should drive progress, we specialize in building intelligent,
         scalable, and secure systems tailored to your growth goals.
@@ -19,17 +19,17 @@ const AboutUs = () => (
         project.
       </p>
       <p>
-        We take pride in crafting user-centric software that’s not only functional, but intuitive,
+        We take pride in crafting user-centric software that's not only functional, but intuitive,
         performant, and built to last. Our approach combines agile development with strategic
         consulting to ensure we understand your unique challenges and opportunities.
       </p>
       <p>
-        At GiiTech, innovation isn’t just a buzzword — it’s the foundation of everything we do.
+        At ASTEM Software Labs, innovation isn't just a buzzword. It's the foundation of everything we do.
         From developing mobile apps and enterprise platforms to automating workflows and integrating
         third-party services, we build with the future in mind.
       </p>
       <p>
-        We are more than a service provider — we are your <strong>strategic technology partner</strong>. Let us help
+        We are more than a service provider. We are your <strong>strategic technology partner</strong>. Let us help
         you unlock new possibilities, improve efficiency, and stay ahead of the curve in a connected,
         digital-first world.
       </p>
@@ -38,9 +38,9 @@ const AboutUs = () => (
     <div className="mt-10">
       <Link
         to="/"
-        className="inline-block bg-primary text-white px-5 py-2 rounded hover:bg-cta transition"
+        className="inline-flex w-full justify-center rounded bg-primary px-5 py-3 text-white transition hover:bg-cta sm:w-auto"
       >
-        ← Back to Homepage
+        &lt;- Back to Homepage
       </Link>
     </div>
   </div>

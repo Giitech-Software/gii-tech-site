@@ -5,27 +5,27 @@ import { FaFacebook, FaTwitter, FaInstagram, FaTiktok, FaWhatsapp } from 'react-
 const socialLinks = [
   {
     icon: <FaFacebook />,
-    href: 'https://facebook.com/GiiTech',
+    href: 'https://facebook.com',
     label: 'Facebook',
   },
   {
     icon: <FaTwitter />,
-    href: 'https://twitter.com/GiiTech',
+    href: 'https://twitter.com',
     label: 'Twitter',
   },
   {
     icon: <FaInstagram />,
-    href: 'https://instagram.com/GiiTech',
+    href: 'https://instagram.com',
     label: 'Instagram',
   },
   {
     icon: <FaTiktok />,
-    href: 'https://www.tiktok.com/@GiiTech',
+    href: 'https://www.tiktok.com',
     label: 'TikTok',
   },
   {
     icon: <FaWhatsapp />,
-    href: 'https://wa.me/233247754531?text=Hi%20GiiTech%2C%20I%20need%20assistance.',
+    href: 'https://wa.me/233247754531?text=Hi%20ASTEM%20Software%20Labs%2C%20I%20need%20assistance.',
     label: 'WhatsApp',
   },
 ];

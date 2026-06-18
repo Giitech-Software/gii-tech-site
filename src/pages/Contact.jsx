@@ -1,12 +1,19 @@
 // src/pages/Contact.jsx
 import React, { useState } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { FaEnvelope, FaGlobe, FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 import { db } from '../firebase/config';
 import Seo from '../components/Seo';
 import SeoConfig from '../config/SeoConfig';
 
+const whatsappNumber = '233247754531';
+const whatsappMessage = encodeURIComponent(
+  'Hi ASTEM Software Labs, I would like to chat about your services.'
+);
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
 export default function Contact() {
-  const [form, setForm]   = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
 
   const handleChange = (e) =>
@@ -20,11 +27,11 @@ export default function Contact() {
         ...form,
         timestamp: serverTimestamp(),
       });
-      setStatus('✅ Message sent successfully!');
+      setStatus('Message sent successfully!');
       setForm({ name: '', email: '', message: '' });
     } catch (err) {
       console.error(err);
-      setStatus('❌ Failed to send message. Please try again.');
+      setStatus('Failed to send message. Please try again.');
     }
   };
 
@@ -32,21 +39,53 @@ export default function Contact() {
     <>
       <Seo {...SeoConfig.contact} />
       <div className="min-h-screen bg-background text-text flex flex-col">
+        <main className="mx-auto w-full max-w-3xl flex-grow px-0 py-6 sm:p-8">
+          <h2 className="mb-4 px-4 text-center text-3xl font-bold text-primary sm:px-0 sm:text-4xl">Contact Us</h2>
 
-        {/* Main */}
-        <main className="flex-grow p-10 max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold text-primary text-center mb-6">Contact Us</h2>
+          <div className="mb-6 space-y-3 px-4 text-gray-700 sm:px-0">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <a
+                href="mailto:giitechsoftems@gmail.com"
+                className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
+              >
+                <FaEnvelope className="shrink-0" />
+                <span className="min-w-0 truncate">giitechsoftems@gmail.com</span>
+              </a>
+              <a
+                href="tel:+233247754531"
+                className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
+              >
+                <FaPhoneAlt className="shrink-0" />
+                <span>+233 247 754 531</span>
+              </a>
+              <a
+                href="https://giitech-software-systems.web.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 text-primary shadow-sm transition hover:border-primary"
+              >
+                <FaGlobe className="shrink-0" />
+                <span className="min-w-0 truncate">giitech-software-systems.web.app</span>
+              </a>
+              <p className="flex min-h-14 items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+                <FaMapMarkerAlt className="shrink-0 text-primary" />
+                <span>Accra, Ghana</span>
+              </p>
+            </div>
 
-          {/* Quick contact details */}
-          <div className="text-center text-gray-700 space-y-3 mb-10">
-            <p>📧 <a href="mailto:giitechsoftems@gmail.com" className="text-primary hover:underline">giitechsoftems@gmail.com</a></p>
-            <p>📞 +233 201 886 211 / +233 537 317 909</p>
-            <p><a href="https://www.giitechsoftwaresystems.com" className="text-primary hover:underline">https://www.giitechsoftwaresystems.com</a></p>
-            <p>📍 Accra, Ghana</p>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-3 font-semibold text-white transition hover:bg-[#1DA851]"
+              aria-label="Chat with ASTEM Software Labs on WhatsApp"
+            >
+              <FaWhatsapp className="text-xl" />
+              Chat on WhatsApp Business
+            </a>
           </div>
 
-          {/* Contact form */}
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 bg-white p-5 shadow sm:rounded-lg sm:p-6">
             <input
               type="text"
               name="name"
@@ -54,7 +93,7 @@ export default function Contact() {
               onChange={handleChange}
               placeholder="Your Name"
               required
-              className="w-full p-2 border rounded focus:ring-primary focus:outline-none"
+              className="w-full rounded border p-3 focus:outline-none focus:ring-primary"
             />
             <input
               type="email"
@@ -63,7 +102,7 @@ export default function Contact() {
               onChange={handleChange}
               placeholder="Your Email"
               required
-              className="w-full p-2 border rounded focus:ring-primary focus:outline-none"
+              className="w-full rounded border p-3 focus:outline-none focus:ring-primary"
             />
             <textarea
               name="message"
@@ -82,8 +121,6 @@ export default function Contact() {
             {status && <p className="text-center mt-2">{status}</p>}
           </form>
         </main>
-
-      
       </div>
     </>
   );

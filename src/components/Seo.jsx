@@ -2,8 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 export default function Seo({ title, description, image, path, author, publisher }) {
-  const fullTitle = title || 'GiiTech Software Systems';
-  const fullDescription = description || 'Innovative software solutions from GiiTech.';
+  const fullTitle = title || 'ASTEM Software Labs';
+  const fullDescription = description || 'Innovative software solutions from ASTEM Software Labs.';
   const url = `https://giitech-software-systems.web.app
 ${path || ''}`;
 
